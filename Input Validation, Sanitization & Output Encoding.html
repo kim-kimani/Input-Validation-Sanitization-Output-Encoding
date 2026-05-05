@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Task 11</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #eef2f5;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #1a2a3a;
+      padding: 2rem 1.5rem;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem 0;
+      color: #0b2b3b;
+      border-bottom: 2px solid #bac8d9;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    .subhead {
+      color: #2c4c6c;
+      margin-bottom: 2rem;
+      border-left: 3px solid #3f7e9c;
+      padding-left: 1rem;
+      font-weight: 500;
+    }
+    .lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-top: 1.2rem;
+    }
+    .card {
+      background: white;
+      border: 1px solid #b9c4d1;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.05);
+    }
+    .card-header {
+      background: #f0f4f9;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #cdd9e6;
+    }
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #144a66;
+    }
+    .card-header p {
+      margin: 0.3rem 0 0;
+      font-size: 0.85rem;
+      color: #3d5a73;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+    label {
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #1d4d6b;
+      letter-spacing: 0.3px;
+    }
+    input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-family: 'Courier New', 'Fira Code', monospace;
+      font-size: 0.9rem;
+      border: 1px solid #8da0b5;
+      background: #fff;
+      margin-bottom: 0.2rem;
+    }
+    input:focus {
+      border-color: #1e6f9f;
+      outline: none;
+      background: #fefef7;
+    }
+    .demo-area {
+      background: #f8fafc;
+      border: 1px solid #cbdae9;
+      padding: 0.8rem 1rem;
+      margin: 0.8rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    .demo-title {
+      font-weight: 700;
+      font-size: 0.75rem;
+      margin-top: 0.8rem;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      color: #2c5a74;
+    }
+    .sql-block {
+      background: #0f212e;
+      color: #e6f7ff;
+      padding: 0.7rem;
+      font-family: monospace;
+      font-size: 0.8rem;
+      border: 1px solid #3a5e7a;
+      margin: 0.8rem 0;
+      overflow-x: auto;
+    }
+    .param-note {
+      color: #b9f6ca;
+      display: block;
+      margin-top: 5px;
+    }
+    .valid-badge {
+      background: #c8f0d1;
+      color: #1c6d2f;
+      padding: 0.15rem 0.7rem;
+      font-weight: bold;
+      border: 1px solid #2b7a3e;
+      display: inline-block;
+    }
+    .invalid-badge {
+      background: #ffe0db;
+      color: #b13e3e;
+      padding: 0.15rem 0.7rem;
+      font-weight: bold;
+      border: 1px solid #c25c5c;
+      display: inline-block;
+    }
+    .warning-note {
+      background: #fff3cf;
+      border: 1px solid #e6b422;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.75rem;
+      margin: 1rem 0 0.5rem;
+    }
+    button.sample-btn {
+      background: #e4eaef;
+      border: 1px solid #9ab3c8;
+      padding: 0.2rem 0.9rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      margin-right: 0.6rem;
+      margin-bottom: 0.6rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    button.sample-btn:hover {
+      background: #d0dee9;
+      border-color: #6f8eaa;
+    }
+    footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.7rem;
+      border-top: 1px solid #bacad9;
+      padding-top: 1.2rem;
+      color: #4b6e8a;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Security Sandbox </h1>
+  <div class="subhead">Input Validation, Sanitization & Output Encoding Lab</div>
+
+  <div class="lab-grid">
+    
+    <!-- HTML ENCODING CARD -->
+    <div class="card">
+      <div class="card-header">
+        <h2>HTML encoding</h2>
+        <p>Prevent XSS — special characters become harmless entities</p>
+      </div>
+      <div class="card-body">
+        <label>Your text (dangerous or safe)</label>
+        <input type="text" id="htmlInput" value="<h1>hello</h1>">
+        
+        <div class="demo-title">HTML-ENCODED (safe for DOM)</div>
+        <div class="demo-area" id="htmlEncodedOut" style="background:#ffffff;">&lt;h1&gt;hello&lt;/h1&gt;</div>
+        
+        <div class="demo-title">RAW INPUT (as plain text — DANGEROUS, rendered as HTML)</div>
+        <div class="demo-area" id="htmlRawOut" style="background:#fef5e7;"><h1>hello</h1></div>
+        
+        <div class="warning-note">
+          <strong>Why encoding matters:</strong> Raw input inserted as HTML executes scripts and renders tags (see the heading above). Encoded version replaces &lt; with &amp;lt; and &gt; with &amp;gt; so the browser shows tags as plain text.
+        </div>
+        
+        <div>
+          <span class="demo-title">Test samples</span><br>
+          <button class="sample-btn" data-html="<script>alert('XSS')</script>">XSS script</button>
+          <button class="sample-btn" data-html="<img src=x onerror=steal()>">onerror payload</button>
+          <button class="sample-btn" data-html="' &quot; &lt;&gt;&amp;">special chars</button>
+          <button class="sample-btn" data-html="<b>bold text</b> and <i>italic</i>">bold + italic</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- SQL INJECTION CARD -->
+    <div class="card">
+      <div class="card-header">
+        <h2>SQL injection simulation</h2>
+        <p>Concatenated vs. Parameterised queries</p>
+      </div>
+      <div class="card-body">
+        <label>Username / search term</label>
+        <input type="text" id="sqlInput" value="Robert'); DROP TABLE students; --">
+        
+        <div class="demo-title">VULNERABLE: String concatenation</div>
+        <div class="sql-block" id="concatenatedQuery">SELECT * FROM users WHERE name = 'Robert'); DROP TABLE students; --'</div>
+        
+        <div class="demo-title">SAFE: Parameterised query (placeholder + bound values)</div>
+        <div class="sql-block" id="parameterisedQuery">SELECT * FROM users WHERE name = ?<br><span class="param-note">→ Parameters: ["Robert'); DROP TABLE students; --"]</span></div>
+        
+        <div class="warning-note">
+          <strong>How parameterised queries work:</strong> The SQL statement and the data are sent separately to the database. The input is never inserted into the SQL string, so malicious code like ' OR '1'='1 cannot change the query logic.
+        </div>
+        
+        <div>
+          <span class="demo-title">Malicious / edge samples</span><br>
+          <button class="sample-btn" data-sql="admin' --">admin' -- (comment)</button>
+          <button class="sample-btn" data-sql="' OR '1'='1">OR 1=1</button>
+          <button class="sample-btn" data-sql="Robert'; DROP TABLE students; --">DROP TABLE</button>
+          <button class="sample-btn" data-sql="john_doe@example.com">normal user</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- EMAIL VALIDATION CARD -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Email format validation</h2>
+        <p>Real-time syntax check + common patterns</p>
+      </div>
+      <div class="card-body">
+        <label>Email address</label>
+        <input type="text" id="emailInput" value="alice+filter@gmail.com">
+        
+        <div class="demo-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Validation status</span>
+          <span id="emailBadge" class="valid-badge">VALID</span>
+        </div>
+        <div class="demo-area" id="emailFeedback" style="background:#eef5ff;">
+          "alice+filter@gmail.com" is a well-formed email address. Format: local@domain.tld
+        </div>
+        
+        <div class="warning-note">
+          <strong>Regex rule:</strong> local-part@domain.tld — valid characters + proper domain structure (at least one dot in domain).
+        </div>
+        
+        <div>
+          <span class="demo-title">Sample emails</span><br>
+          <button class="sample-btn" data-email="contact@company.co.uk">valid: contact@company.co.uk</button>
+          <button class="sample-btn" data-email="alice+filter@gmail.com">with +tag</button>
+          <button class="sample-btn" data-email="missingatsymbol.com">missing @</button>
+          <button class="sample-btn" data-email="bob@domain">missing TLD</button>
+          <button class="sample-btn" data-email="spaced name@test.com">spaces</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    Educational Sandbox — Daily Task 11
+  </footer>
+</div>
+
+<script>
+  // Helper: convert text to HTML entities (for safe display as literal string)
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/["']/g, function(m) {
+      if (m === '"') return '&quot;';
+      if (m === "'") return '&#39;';
+      return m;
+    });
+  }
+  
+  // Email validator
+  function isValidEmail(email) {
+    if (!email) return false;
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+    return emailRegex.test(email);
+  }
+  
+  // DOM elements
+  const htmlInput = document.getElementById('htmlInput');
+  const htmlEncodedOut = document.getElementById('htmlEncodedOut');
+  const htmlRawOut = document.getElementById('htmlRawOut');
+  
+  const sqlInput = document.getElementById('sqlInput');
+  const concatenatedQueryDiv = document.getElementById('concatenatedQuery');
+  const parameterisedQueryDiv = document.getElementById('parameterisedQuery');
+  
+  const emailInput = document.getElementById('emailInput');
+  const emailBadge = document.getElementById('emailBadge');
+  const emailFeedback = document.getElementById('emailFeedback');
+  
+  // HTML panel: ENCODED shows escaped string literally, RAW shows rendered HTML (danger)
+  function updateHtmlPanel() {
+    let rawValue = htmlInput.value;
+    // ENCODED: show the escaped version as plain text (so user sees &lt;h1&gt;)
+    htmlEncodedOut.textContent = escapeHtml(rawValue);
+    // RAW: interpret as HTML to demonstrate XSS risk (heading, bold, etc.)
+    htmlRawOut.innerHTML = rawValue;
+  }
+  
+  // SQL panel
+  function updateSqlPanel() {
+    let userInput = sqlInput.value;
+    concatenatedQueryDiv.textContent = `SELECT * FROM users WHERE name = '${userInput}'`;
+    parameterisedQueryDiv.innerHTML = `SELECT * FROM users WHERE name = ?<br><span class="param-note">→ Parameters: [${JSON.stringify(userInput)}]</span>`;
+  }
+  
+  // Email panel
+  function updateEmailPanel() {
+    let email = emailInput.value.trim();
+    let valid = isValidEmail(email);
+    if (valid && email !== "") {
+      emailBadge.textContent = "VALID";
+      emailBadge.className = "valid-badge";
+      emailFeedback.innerHTML = `"${escapeHtml(email)}" is a well-formed email address.<br>Format: local-part@domain.tld (e.g., name@example.com)`;
+      emailFeedback.style.background = "#e6f4ea";
+    } else {
+      emailBadge.textContent = "INVALID";
+      emailBadge.className = "invalid-badge";
+      let reason = "";
+      if (email === "") reason = "Email cannot be empty.";
+      else if (!email.includes("@")) reason = "Missing '@' symbol.";
+      else if (email.startsWith("@") || email.endsWith("@")) reason = "'@' cannot be at start or end.";
+      else if (email.split('@').length !== 2) reason = "Multiple '@' symbols.";
+      else if (email.split('@')[1].split('.').length < 2 || email.split('@')[1].indexOf('.') === -1) 
+        reason = "Domain must contain a dot (e.g., domain.com).";
+      else reason = "Invalid characters or domain structure.";
+      emailFeedback.innerHTML = `"${escapeHtml(email)}" — ${reason}`;
+      emailFeedback.style.background = "#ffe6e5";
+    }
+  }
+  
+  // Sample buttons
+  function bindSampleButtons() {
+    document.querySelectorAll('[data-html]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        htmlInput.value = btn.getAttribute('data-html');
+        updateHtmlPanel();
+      });
+    });
+    document.querySelectorAll('[data-sql]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        sqlInput.value = btn.getAttribute('data-sql');
+        updateSqlPanel();
+      });
+    });
+    document.querySelectorAll('[data-email]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        emailInput.value = btn.getAttribute('data-email');
+        updateEmailPanel();
+      });
+    });
+  }
+  
+  // Event listeners
+  htmlInput.addEventListener('input', updateHtmlPanel);
+  sqlInput.addEventListener('input', updateSqlPanel);
+  emailInput.addEventListener('input', updateEmailPanel);
+  
+  // Initialise
+  function init() {
+    bindSampleButtons();
+    updateHtmlPanel();
+    updateSqlPanel();
+    updateEmailPanel();
+  }
+  init();
+</script>
+</body>
+</html>

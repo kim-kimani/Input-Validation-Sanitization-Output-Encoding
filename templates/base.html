@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Sandbox</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #eef2f5;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #1a2a3a;
+      padding: 2rem 1.5rem;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem 0;
+      color: #0b2b3b;
+      border-bottom: 2px solid #bac8d9;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    .subhead {
+      color: #2c4c6c;
+      margin-bottom: 2rem;
+      border-left: 3px solid #3f7e9c;
+      padding-left: 1rem;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #1e6f9f;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 15px;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+    .lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-top: 1.2rem;
+    }
+    .card {
+      background: white;
+      border: 1px solid #b9c4d1;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.05);
+    }
+    .card-header {
+      background: #f0f4f9;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #cdd9e6;
+    }
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #144a66;
+    }
+    .card-header p {
+      margin: 0.3rem 0 0;
+      font-size: 0.85rem;
+      color: #3d5a73;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+    label {
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #1d4d6b;
+      letter-spacing: 0.3px;
+    }
+    input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-family: 'Courier New', 'Fira Code', monospace;
+      font-size: 0.9rem;
+      border: 1px solid #8da0b5;
+      background: #fff;
+      margin-bottom: 0.2rem;
+    }
+    input:focus {
+      border-color: #1e6f9f;
+      outline: none;
+      background: #fefef7;
+    }
+    .demo-area {
+      background: #f8fafc;
+      border: 1px solid #cbdae9;
+      padding: 0.8rem 1rem;
+      margin: 0.8rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    .demo-title {
+      font-weight: 700;
+      font-size: 0.75rem;
+      margin-top: 0.8rem;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      color: #2c5a74;
+    }
+    .sql-block {
+      background: #0f212e;
+      color: #e6f7ff;
+      padding: 0.7rem;
+      font-family: monospace;
+      font-size: 0.8rem;
+      border: 1px solid #3a5e7a;
+      margin: 0.8rem 0;
+      overflow-x: auto;
+    }
+    .param-note {
+      color: #b9f6ca;
+      display: block;
+      margin-top: 5px;
+    }
+    .valid-badge {
+      background: #c8f0d1;
+      color: #1c6d2f;
+      padding: 0.15rem 0.7rem;
+      font-weight: bold;
+      border: 1px solid #2b7a3e;
+      display: inline-block;
+    }
+    .invalid-badge {
+      background: #ffe0db;
+      color: #b13e3e;
+      padding: 0.15rem 0.7rem;
+      font-weight: bold;
+      border: 1px solid #c25c5c;
+      display: inline-block;
+    }
+    .warning-note {
+      background: #fff3cf;
+      border: 1px solid #e6b422;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.75rem;
+      margin: 1rem 0 0.5rem;
+      line-height: 1.4;
+    }
+    button.sample-btn {
+      background: #e4eaef;
+      border: 1px solid #9ab3c8;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.6rem;
+      margin-bottom: 0.6rem;
+      cursor: pointer;
+      font-family: inherit;
+      border-radius: 3px;
+    }
+    button.sample-btn:hover {
+      background: #d0dee9;
+      border-color: #6f8eaa;
+    }
+    footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.7rem;
+      border-top: 1px solid #bacad9;
+      padding-top: 1.2rem;
+      color: #4b6e8a;
+    }
+    .content-body {
+        background: white;
+        padding: 2rem;
+        border: 1px solid #b9c4d1;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.05);
+        line-height: 1.6;
+    }
+    .content-body h2 {
+        color: #144a66;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    .content-body h3 {
+        color: #1e6f9f;
+        margin-top: 1.5rem;
+    }
+    .code-block {
+        background: #f4f7fa;
+        border: 1px solid #cdd9e6;
+        padding: 10px;
+        font-family: monospace;
+        border-radius: 4px;
+        overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Security Sandbox & Educational Resource</h1>
+  <div class="subhead">
+    <span>Input Validation, Sanitization & Output Encoding</span>
+    <div class="nav-links">
+        <a href="{% url 'index' %}">Live Sandbox</a>
+        <a href="{% url 'report' %}">Core Concepts Report</a>
+    </div>
+  </div>
+
+  {% block content %}
+  {% endblock %}
+
+  <footer>
+    Educational Sandbox — Built with Django
+  </footer>
+</div>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
