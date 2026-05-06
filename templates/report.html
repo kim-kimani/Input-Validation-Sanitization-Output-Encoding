@@ -3,56 +3,26 @@
 {% block content %}
 <div class="content-body">
     <h2>Core Concepts: Validation, Sanitization, and Encoding</h2>
-    <p>Securing an application requires a layered approach. Relying on a single defense mechanism is often insufficient. Understanding the distinct roles of input validation, sanitization, and output encoding is critical to building resilient applications.</p>
-    
+    <p>Securing an application requires a layered approach. Relying on a single defense mechanism is often insufficient.
+        Understanding the distinct roles of input validation, sanitization, and output encoding is critical to building
+        resilient applications.</p>
+
     <h3>1. Input Validation</h3>
-    <p><strong>What it is:</strong> Ensuring that the data coming into your application matches the expected format, type, and length before processing it. Validation should always happen on the server-side, though client-side validation improves user experience.</p>
+    <p><strong>What it is:</strong> Ensuring that the data coming into your application matches the expected format,
+        type, and length before processing it. Validation should always happen on the server-side, though client-side
+        validation improves user experience.</p>
     <p><strong>Role:</strong> First line of defense. It rejects bad data early.</p>
 
     <h3>2. Sanitization (or Cleansing)</h3>
-    <p><strong>What it is:</strong> Modifying input to make it safe. This might involve removing dangerous characters or stripping out unauthorized HTML tags.</p>
-    <p><strong>Role:</strong> When you need to accept complex input (like rich text) but must remove dangerous elements (like <code>&lt;script&gt;</code> tags) before storing it.</p>
+    <p><strong>What it is:</strong> Modifying input to make it safe. This might involve removing dangerous characters or
+        stripping out unauthorized HTML tags.</p>
+    <p><strong>Role:</strong> When you need to accept complex input (like rich text) but must remove dangerous elements
+        (like <code>&lt;script&gt;</code> tags) before storing it.</p>
 
     <h3>3. Output Encoding</h3>
-    <p><strong>What it is:</strong> Converting potentially dangerous characters into their safe, representational form before rendering them in the browser. For example, converting <code>&lt;</code> to <code>&amp;lt;</code>.</p>
-    <p><strong>Role:</strong> The ultimate defense against Cross-Site Scripting (XSS). It ensures that whatever data is stored in the database is treated strictly as data (text) and not executable code by the browser.</p>
-
-    <h2>Attack Patterns and Defenses</h2>
-
-    <h3>A. Cross-Site Scripting (XSS)</h3>
-    <ul>
-        <li><strong>Attack Pattern:</strong> An attacker injects malicious JavaScript into a web page viewed by other users.</li>
-        <li><strong>Example Payload:</strong> <code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code></li>
-        <li><strong>Real-World Impact:</strong> Stealing session cookies, redirecting users, or performing actions on behalf of the user.</li>
-        <li><strong>Correct Defense:</strong> Context-aware output encoding. Use Django's template engine which automatically HTML-encodes output.</li>
-    </ul>
-    
-    <h4>Code Comparison (XSS)</h4>
-    <div class="code-block">
-        <strong>Vulnerable:</strong><br>
-        <code>return HttpResponse(f"&lt;h1&gt;Welcome {user_input}&lt;/h1&gt;")</code>
-        <br><br>
-        <strong>Safe (Django Template):</strong><br>
-        <code>&lt;!-- In template --&gt;</code><br>
-        <code>&lt;h1&gt;Welcome &#123;&#123; user_input &#125;&#125;&lt;/h1&gt;</code>
-    </div>
-
-    <h3>B. SQL Injection (SQLi)</h3>
-    <ul>
-        <li><strong>Attack Pattern:</strong> An attacker inserts malicious SQL statements into entry fields for execution.</li>
-        <li><strong>Example Payload:</strong> <code>Robert'); DROP TABLE students; --</code> or <code>' OR '1'='1</code></li>
-        <li><strong>Real-World Impact:</strong> Unauthorized data access, data modification, or complete database deletion.</li>
-        <li><strong>Correct Defense:</strong> Parameterized queries (prepared statements) or using an ORM like Django's ORM.</li>
-    </ul>
-
-    <h4>Code Comparison (SQLi)</h4>
-    <div class="code-block">
-        <strong>Vulnerable:</strong><br>
-        <code>cursor.execute(f"SELECT * FROM users WHERE name = '{user_input}'")</code>
-        <br><br>
-        <strong>Safe:</strong><br>
-        <code>cursor.execute("SELECT * FROM users WHERE name = %s", [user_input])</code><br>
-        <code># Or using ORM: User.objects.filter(name=user_input)</code>
-    </div>
+    <p><strong>What it is:</strong> Converting potentially dangerous characters into their safe, representational form
+        before rendering them in the browser. For example, converting <code>&lt;</code> to <code>&amp;lt;</code>.</p>
+    <p><strong>Role:</strong> The ultimate defense against Cross-Site Scripting (XSS). It ensures that whatever data is
+        stored in the database is treated strictly as data (text) and not executable code by the browser.</p>
 </div>
 {% endblock %}

@@ -93,32 +93,12 @@ def api_sql_search(request):
     return JsonResponse({'status': 'error', 'message': 'Only POST method allowed'}, status=405)
 
 @csrf_exempt
-def api_validate_email(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            email = data.get('email', '')
-            
-            try:
-                validate_email(email)
-            except ValidationError as e:
-                return JsonResponse({'status': 'error', 'message': e.message})
-                
-            if Subscriber.objects.filter(email=email).exists():
-                return JsonResponse({'status': 'error', 'message': 'Email already subscribed.'})
-                
-            return JsonResponse({'status': 'success', 'message': 'Email format is valid and available.'})
-            
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'})
-    return JsonResponse({'status': 'error', 'message': 'Only POST method allowed'}, status=405)
-
-@csrf_exempt
 def api_subscribe(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             email = data.get('email', '')
+            validate_only = data.get('validate_only', False)
             
             try:
                 validate_email(email)
@@ -127,6 +107,9 @@ def api_subscribe(request):
                 
             if Subscriber.objects.filter(email=email).exists():
                 return JsonResponse({'status': 'error', 'message': 'Email already subscribed.'})
+                
+            if validate_only:
+                return JsonResponse({'status': 'success', 'message': 'Email format is valid and available.'})
                 
             Subscriber.objects.create(email=email)
             return JsonResponse({'status': 'success', 'message': 'Successfully subscribed!'})

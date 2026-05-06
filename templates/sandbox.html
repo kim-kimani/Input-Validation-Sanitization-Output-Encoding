@@ -195,10 +195,10 @@
       btnSubscribe.style.cursor = 'not-allowed';
       return;
     }
-    const res = await fetch('/api/validate_email/', {
+    const res = await fetch('/api/subscribe/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: val })
+      body: JSON.stringify({ email: val, validate_only: true })
     });
     const data = await res.json();
 
