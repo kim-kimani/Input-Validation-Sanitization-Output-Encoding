@@ -11,17 +11,18 @@
     <div class="card-body">
       <label>Your text (dangerous or safe)</label>
       <input type="text" id="htmlInput" value="<h1>hello</h1>">
-      
+
       <div class="demo-title">SERVER HTML-ENCODED (safe for DOM)</div>
       <div class="demo-area" id="htmlEncodedOut" style="background:#ffffff;"></div>
-      
+
       <div class="demo-title">SERVER RAW INPUT (rendered as HTML — DANGEROUS)</div>
       <div class="demo-area" id="htmlRawOut" style="background:#fef5e7;"></div>
-      
+
       <div class="warning-note">
-        <strong>Why encoding matters:</strong> Raw input inserted as HTML executes scripts and renders tags. The server encodes <code>&lt;</code> as <code>&amp;lt;</code>, ensuring the browser displays it safely as text.
+        <strong>Why encoding matters:</strong> Raw input inserted as HTML executes scripts and renders tags. The server
+        encodes <code>&lt;</code> as <code>&amp;lt;</code>, ensuring the browser displays it safely as text.
       </div>
-      
+
       <div>
         <span class="demo-title">Test samples</span><br>
         <button class="sample-btn" data-html="<script>alert('XSS')</script>">XSS script</button>
@@ -31,7 +32,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- SQL INJECTION CARD -->
   <div class="card">
     <div class="card-header">
@@ -41,11 +42,15 @@
     <div class="card-body">
       <label>Employee Name / Raw SQL Query</label>
       <input type="text" id="sqlInput" value="SELECT * FROM sandbox_employee;">
-      
+
       <div style="margin: 10px 0; display: flex; gap: 10px;">
-          <button id="btnVulnerableSql" style="background:#ffcccc; border:1px solid #cc0000; padding:8px; cursor:pointer;">Run Vulnerable Query</button>
-          <button id="btnSafeSql" style="background:#ccffcc; border:1px solid #00cc00; padding:8px; cursor:pointer;">Run Safe Query</button>
-          <button id="btnRawSql" style="background:#e0e0e0; border:1px solid #999; padding:8px; cursor:pointer;">Run Raw SQL (Direct)</button>
+        <button id="btnVulnerableSql"
+          style="background:#ffcccc; border:1px solid #cc0000; padding:8px; cursor:pointer;">Run Vulnerable
+          Query</button>
+        <button id="btnSafeSql" style="background:#ccffcc; border:1px solid #00cc00; padding:8px; cursor:pointer;">Run
+          Safe Query</button>
+        <button id="btnRawSql" style="background:#e0e0e0; border:1px solid #999; padding:8px; cursor:pointer;">Run Raw
+          SQL (Direct)</button>
       </div>
 
       <div class="demo-title">Executed Query (Server Response)</div>
@@ -53,11 +58,12 @@
 
       <div class="demo-title">Database Results</div>
       <div class="demo-area" id="sqlResultsOutput" style="background:#f0f4f9;"></div>
-      
+
       <div class="warning-note">
-        <strong>Modes:</strong> Vulnerable uses string formatting. Safe uses parameterized variables. Raw allows you to execute real SQL queries directly against the database exactly as typed.
+        <strong>Modes:</strong> Vulnerable uses string formatting. Safe uses parameterized variables. Raw allows you to
+        execute real SQL queries directly against the database exactly as typed.
       </div>
-      
+
       <div>
         <span class="demo-title">Samples</span><br>
         <button class="sample-btn" data-sql="Alice Smith">Normal Search</button>
@@ -68,7 +74,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- EMAIL VALIDATION CARD -->
   <div class="card">
     <div class="card-header">
@@ -78,8 +84,9 @@
     <div class="card-body">
       <label>Subscribe Email Address</label>
       <input type="text" id="emailInput" value="alice+filter@gmail.com">
-      
-      <button id="btnSubscribe" style="background:#1e6f9f; color:white; border:none; padding:8px 15px; margin: 10px 0; cursor:pointer;">Subscribe (AJAX)</button>
+
+      <button id="btnSubscribe"
+        style="background:#1e6f9f; color:white; border:none; padding:8px 15px; margin: 10px 0; cursor:pointer;">Subscribe</button>
 
       <div class="demo-title" style="display: flex; justify-content: space-between; align-items: center;">
         <span>Server Response Status</span>
@@ -88,11 +95,12 @@
       <div class="demo-area" id="emailFeedback" style="background:#eef5ff;">
         Awaiting submission...
       </div>
-      
+
       <div class="warning-note">
-        <strong>Server Validation:</strong> Uses Django's `validate_email`. Even if client-side JS fails or is bypassed, the server protects the database from bad formats.
+        <strong>Server Validation:</strong> Uses Django's `validate_email`. Even if client-side JS fails or is bypassed,
+        the server protects the database from bad formats.
       </div>
-      
+
       <div>
         <span class="demo-title">Sample emails</span><br>
         <button class="sample-btn" data-email="contact@company.co.uk">valid</button>
@@ -109,24 +117,24 @@
 <script>
   // Helper to get CSRF token from cookies if needed (though we can use fetch without it if csrf is exempt, but better practice is to include it. Since we haven't rendered the token, we can just use @csrf_exempt on views, or pass it in. To avoid CSRF issues for this simple sandbox, I'll pass the token in template or use exempt. Actually, let's just make the views exempt or pass the token.)
   // We'll use a simple fetch function.
-  
+
   // HTML Panel
   const htmlInput = document.getElementById('htmlInput');
   const htmlEncodedOut = document.getElementById('htmlEncodedOut');
   const htmlRawOut = document.getElementById('htmlRawOut');
 
   async function updateHtmlPanel() {
-      const val = htmlInput.value;
-      const res = await fetch('/api/html_encode/', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({input: val})
-      });
-      const data = await res.json();
-      if(data.status === 'success') {
-          htmlEncodedOut.textContent = data.encoded;
-          htmlRawOut.innerHTML = data.raw;
-      }
+    const val = htmlInput.value;
+    const res = await fetch('/api/html_encode/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input: val })
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      htmlEncodedOut.textContent = data.encoded;
+      htmlRawOut.innerHTML = data.raw;
+    }
   }
 
   // SQL Panel
@@ -135,35 +143,35 @@
   const sqlResultsOutput = document.getElementById('sqlResultsOutput');
 
   async function runSql(type) {
-      const val = sqlInput.value;
-      const res = await fetch('/api/sql_search/', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({term: val, type: type})
-      });
-      const data = await res.json();
-      
-      if(data.query) {
-          sqlQueryOutput.textContent = data.query;
-      }
-      
-      if(data.status === 'success') {
-          sqlResultsOutput.style.background = '#e6f4ea';
-          if(data.results.length === 0) {
-              sqlResultsOutput.innerHTML = "<em>No results found.</em>";
-          } else {
-              let html = "<ul style='margin:0; padding-left:20px;'>";
-              data.results.forEach(r => {
-                  let rowText = Object.keys(r).map(k => `<b>${k}</b>: ${r[k]}`).join(' | ');
-                  html += `<li>${rowText}</li>`;
-              });
-              html += "</ul>";
-              sqlResultsOutput.innerHTML = html;
-          }
+    const val = sqlInput.value;
+    const res = await fetch('/api/sql_search/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ term: val, type: type })
+    });
+    const data = await res.json();
+
+    if (data.query) {
+      sqlQueryOutput.textContent = data.query;
+    }
+
+    if (data.status === 'success') {
+      sqlResultsOutput.style.background = '#e6f4ea';
+      if (data.results.length === 0) {
+        sqlResultsOutput.innerHTML = "<em>No results found.</em>";
       } else {
-          sqlResultsOutput.style.background = '#ffe6e5';
-          sqlResultsOutput.textContent = "ERROR: " + data.message;
+        let html = "<ul style='margin:0; padding-left:20px;'>";
+        data.results.forEach(r => {
+          let rowText = Object.keys(r).map(k => `<b>${k}</b>: ${r[k]}`).join(' | ');
+          html += `<li>${rowText}</li>`;
+        });
+        html += "</ul>";
+        sqlResultsOutput.innerHTML = html;
       }
+    } else {
+      sqlResultsOutput.style.background = '#ffe6e5';
+      sqlResultsOutput.textContent = "ERROR: " + data.message;
+    }
   }
 
   document.getElementById('btnVulnerableSql').addEventListener('click', () => runSql('vulnerable'));
@@ -174,50 +182,97 @@
   const emailInput = document.getElementById('emailInput');
   const emailBadge = document.getElementById('emailBadge');
   const emailFeedback = document.getElementById('emailFeedback');
+  const btnSubscribe = document.getElementById('btnSubscribe');
 
-  document.getElementById('btnSubscribe').addEventListener('click', async () => {
-      const val = emailInput.value;
-      const res = await fetch('/api/subscribe/', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({email: val})
-      });
-      const data = await res.json();
-      
-      emailBadge.style.display = 'inline-block';
-      if(data.status === 'success') {
-          emailBadge.textContent = "SUCCESS";
-          emailBadge.className = "valid-badge";
-          emailFeedback.style.background = "#e6f4ea";
-          emailFeedback.textContent = data.message;
-      } else {
-          emailBadge.textContent = "INVALID";
-          emailBadge.className = "invalid-badge";
-          emailFeedback.style.background = "#ffe6e5";
-          emailFeedback.textContent = data.message;
-      }
+  async function validateEmailLive() {
+    const val = emailInput.value;
+    if (!val.trim()) {
+      emailBadge.style.display = 'none';
+      emailFeedback.style.background = '#eef5ff';
+      emailFeedback.textContent = 'Awaiting submission...';
+      btnSubscribe.disabled = true;
+      btnSubscribe.style.opacity = '0.5';
+      btnSubscribe.style.cursor = 'not-allowed';
+      return;
+    }
+    const res = await fetch('/api/validate_email/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: val })
+    });
+    const data = await res.json();
+
+    emailBadge.style.display = 'inline-block';
+    if (data.status === 'success') {
+      emailBadge.textContent = "VALID";
+      emailBadge.className = "valid-badge";
+      emailFeedback.style.background = "#e6f4ea";
+      emailFeedback.textContent = data.message;
+      btnSubscribe.disabled = false;
+      btnSubscribe.style.opacity = '1';
+      btnSubscribe.style.cursor = 'pointer';
+    } else {
+      emailBadge.textContent = "INVALID";
+      emailBadge.className = "invalid-badge";
+      emailFeedback.style.background = "#ffe6e5";
+      emailFeedback.textContent = data.message;
+      btnSubscribe.disabled = true;
+      btnSubscribe.style.opacity = '0.5';
+      btnSubscribe.style.cursor = 'not-allowed';
+    }
+  }
+
+  emailInput.addEventListener('input', validateEmailLive);
+
+  btnSubscribe.addEventListener('click', async () => {
+    const val = emailInput.value;
+    const res = await fetch('/api/subscribe/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: val })
+    });
+    const data = await res.json();
+
+    emailBadge.style.display = 'inline-block';
+    if (data.status === 'success') {
+      emailBadge.textContent = "SUCCESS";
+      emailBadge.className = "valid-badge";
+      emailFeedback.style.background = "#e6f4ea";
+      emailFeedback.textContent = data.message;
+      emailInput.value = '';
+      btnSubscribe.disabled = true;
+      btnSubscribe.style.opacity = '0.5';
+      btnSubscribe.style.cursor = 'not-allowed';
+    } else {
+      emailBadge.textContent = "INVALID";
+      emailBadge.className = "invalid-badge";
+      emailFeedback.style.background = "#ffe6e5";
+      emailFeedback.textContent = data.message;
+    }
   });
 
   // Sample Buttons
   document.querySelectorAll('[data-html]').forEach(btn => {
-      btn.addEventListener('click', () => {
-          htmlInput.value = btn.getAttribute('data-html');
-          updateHtmlPanel();
-      });
+    btn.addEventListener('click', () => {
+      htmlInput.value = btn.getAttribute('data-html');
+      updateHtmlPanel();
+    });
   });
   document.querySelectorAll('[data-sql]').forEach(btn => {
-      btn.addEventListener('click', () => {
-          sqlInput.value = btn.getAttribute('data-sql');
-      });
+    btn.addEventListener('click', () => {
+      sqlInput.value = btn.getAttribute('data-sql');
+    });
   });
   document.querySelectorAll('[data-email]').forEach(btn => {
-      btn.addEventListener('click', () => {
-          emailInput.value = btn.getAttribute('data-email');
-      });
+    btn.addEventListener('click', () => {
+      emailInput.value = btn.getAttribute('data-email');
+      validateEmailLive();
+    });
   });
 
   // Init
   htmlInput.addEventListener('input', updateHtmlPanel);
   updateHtmlPanel();
+  validateEmailLive();
 </script>
 {% endblock %}

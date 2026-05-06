@@ -6,5 +6,6 @@ urlpatterns = [
     path('report/', views.report, name='report'),
     path('api/html_encode/', views.api_html_encode, name='api_html_encode'),
     path('api/sql_search/', views.api_sql_search, name='api_sql_search'),
+    path('api/validate_email/', views.api_validate_email, name='api_validate_email'),
     path('api/subscribe/', views.api_subscribe, name='api_subscribe'),
 ]
